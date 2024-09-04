@@ -16,6 +16,6 @@ public class HomeController {
     @ResponseBody
     @Operation(summary = "메인 페이지")
     public String showMain() {
-        return "안녕";
+        return "Hello!";
     }
 }
