@@ -1,7 +1,7 @@
-package lab.loop.lms.domain.serize.controller;
+package lab.loop.lms.domain.sUrl.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class SeriesController {
+public class ApiV1sUrlsController {
 }
