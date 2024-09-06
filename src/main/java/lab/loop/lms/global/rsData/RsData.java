@@ -1,37 +1,49 @@
 package lab.loop.lms.global.rsData;
 
+import lab.loop.lms.standard.base.Empty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.lang.NonNull;
 
-import static lombok.AccessLevel.PROTECTED;
+import static lombok.AccessLevel.PRIVATE;
 
-@AllArgsConstructor(access = PROTECTED)
+@AllArgsConstructor
+@NoArgsConstructor(access = PRIVATE)
 @Getter
 public class RsData<T> {
-    private final String resultCode;
-    private final String msg;
-    private final T data;
-    private final int statusCode;
-
-    public static <T> RsData<T> of(String resultCode, String msg, T data) {
-        int statusCode = Integer.parseInt(resultCode);
-
-        return new RsData<>(resultCode, msg, data, statusCode);
-    }
-
-    public static RsData<?> of(String resultCode, String msg) {
-        return of(resultCode, msg, null);
-    }
-
-    public boolean isSuccess() {
-        return statusCode >= 200 && statusCode < 400;
-    }
-
-    public boolean isFail() {
-        return !isSuccess();
-    }
+    @NonNull
+    String resultCode;
+    @NonNull
+    int statusCode;
+    @NonNull
+    String msg;
+    @NonNull
+    T data;
 
     public <T> RsData<T> of(T data) {
-        return RsData.of(resultCode, msg, data);
+        return of(this.resultCode, this.msg, data);
+    }
+
+    public static <T> RsData<T> of(String resultCode, String msg) {
+        return of(resultCode, msg, (T) new Empty());
+    }
+
+    public static <T> RsData<T> of(String resultCode, String msg, T data) {
+        int statusCode = Integer.parseInt(resultCode.split("-", 2)[0]);
+
+        RsData<T> tRsData = new RsData<>(resultCode, statusCode, msg, data);
+
+        return tRsData;
+    }
+
+    @NonNull
+    public boolean isSuccess() {
+        return getStatusCode() >= 200 && getStatusCode() < 400;
+    }
+
+    @NonNull
+    public boolean isFail() {
+        return !isSuccess();
     }
 }
