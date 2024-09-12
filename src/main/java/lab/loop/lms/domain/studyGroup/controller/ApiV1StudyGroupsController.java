@@ -42,10 +42,10 @@ public class ApiV1StudyGroupsController {
         List<StudyGroup> studyGroups = this.studyGroupService.getStudyGroupByMemberId(member.getId()); // 로그인한 멤버가 생성한 스터디 그룹 리스트
         List<StudyGroup> invitedGroups = this.studyGroupService.getInvitedStudyGroupsByMemberId(member.getId()); // 로그인한 멤버가 초대 상태인 스터디 그룹 리스트
         if (studyGroups.isEmpty() && invitedGroups.isEmpty()) {
-            return RsData.of("F-1", "스터디 그룹이 존재하지 않습니다.", null);
+            return RsData.of("2", "스터디 그룹이 존재하지 않습니다.", null);
         }
 
-        return RsData.of("S-1", "스터디 그룹 리스트 불러오기 성공", new GroupsResponse(studyGroups, invitedGroups));
+        return RsData.of("1", "스터디 그룹 리스트 불러오기 성공", new GroupsResponse(studyGroups, invitedGroups));
     }
 
     //    그룹 불러오기
@@ -56,7 +56,7 @@ public class ApiV1StudyGroupsController {
             throw new EntityNotFoundException("해당 스터디 그룹이 존재하지 않습니다.");
         }
 
-        return RsData.of("S-2", "스터디 그룹 불러오기 성공", new GroupResponse(studyGroup));
+        return RsData.of("1", "스터디 그룹 불러오기 성공", new GroupResponse(studyGroup));
     }
 
     @Data
@@ -77,7 +77,7 @@ public class ApiV1StudyGroupsController {
     @PostMapping(value = "")
     public RsData<CreateResponse> createGroup(@Valid @RequestBody CreateRequest createRequest) {
         StudyGroup studyGroup = this.studyGroupService.createGroup(createRequest.getName(), createRequest.getDescription(), createRequest.getIsPublic());
-        return RsData.of("S-3", "스터디 그룹을 생성하였습니다.", new CreateResponse(studyGroup));
+        return RsData.of("1", "스터디 그룹을 생성하였습니다.", new CreateResponse(studyGroup));
     }
 
     //    그룹 수정
@@ -85,7 +85,7 @@ public class ApiV1StudyGroupsController {
     public RsData<CreateResponse> modifyGroup(@PathVariable("id") Long id, @Valid @RequestBody CreateRequest createRequest) {
         StudyGroup studyGroup = this.studyGroupService.getStudyGroup(id);
         StudyGroup modifyStudyGroup = this.studyGroupService.modifyGroup(studyGroup, createRequest.getName(), createRequest.getDescription(), createRequest.getIsPublic());
-        return RsData.of("S-4", "해당 스터디 그룹이 수정되었습니다.", new CreateResponse(modifyStudyGroup));
+        return RsData.of("1", "해당 스터디 그룹이 수정되었습니다.", new CreateResponse(modifyStudyGroup));
     }
 
     //    그룹 삭제
@@ -93,6 +93,6 @@ public class ApiV1StudyGroupsController {
     public RsData<Void> deleteGroup(@PathVariable("id") Long id) {
         StudyGroup studyGroup = this.studyGroupService.getStudyGroup(id);
         this.studyGroupService.deleteGroup(studyGroup);
-        return RsData.of("S-5", "해당 스터디 그룹이 삭제되었습니다.", null);
+        return RsData.of("1", "해당 스터디 그룹이 삭제되었습니다.", null);
     }
 }
