@@ -1,5 +1,7 @@
 package lab.loop.lms.domain.sUrl.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lab.loop.lms.domain.sUrl.entity.SUrl;
 import lab.loop.lms.domain.sUrl.request.SUrlRequest;
@@ -17,15 +19,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 @RestController
-@RequestMapping("/api/v1/surls")
+@RequestMapping(value="/api/v1/surls", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
+@Tag(name = "ApiV1sUrlsController", description = "주소단축 컨트롤러")
 public class ApiV1sUrlsController {
 
     private final SUrlService sUrlService;
 
-    // SURL 등록
     @PostMapping("")
+    @Operation(summary = "SURL 등록")
     public RsData<SUrlResponse> create(@Valid @RequestBody SUrlRequest.CreateRequest createRequest, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return RsData.of("400", "올바른 요청이 아닙니다.", null);
@@ -35,8 +40,8 @@ public class ApiV1sUrlsController {
         return RsData.of("201", "SURL 등록 완료", new SUrlResponse(SUrlRsData.getData()));
     }
 
-    // SURL 리다이렉트 (단축 shortUrl에서 실제 originUrl로 이동)
     @GetMapping("/go/{id}")
+    @Operation(summary = "SURL 리다이렉트 (단축 shortUrl에서 실제 originUrl로 이동)")
     public RedirectView redirectViewOriginUrl(@PathVariable("id") Long id) {
         // URL이 존재하지 않을 경우 404 오류 처리
         SUrl sUrl = sUrlService.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "SURL을 찾을 수 없습니다."));
@@ -50,8 +55,8 @@ public class ApiV1sUrlsController {
         return redirectView;
     }
 
-    // SUR 단건 조회
     @GetMapping("/{id}")
+    @Operation(summary = "SURL 단건 조회")
     public RsData<SUrlResponse> getSUrlById(@PathVariable("id") Long id) {
         Optional<SUrl> sUrlOptional = sUrlService.findById(id);
         if (sUrlOptional.isPresent()) {
@@ -62,8 +67,8 @@ public class ApiV1sUrlsController {
     }
 
 
-    // SURL 목록 조회
     @GetMapping("")
+    @Operation(summary = " SURL 다건 조회")
     public RsData<List<SUrlResponse>> getAllSUrls() {
         List<SUrl> sUrls = sUrlService.findAll();
         List<SUrlResponse> sUrlResponses = sUrls.stream()
@@ -73,8 +78,8 @@ public class ApiV1sUrlsController {
     }
 
 
-    // SURL 수정
     @PutMapping("/{id}")
+    @Operation(summary = " SURL 수정")
     public RsData<SUrlResponse> modifySUrl(@PathVariable("id") Long id,
                                            @Valid @RequestBody SUrlRequest.ModifyRequest modifyRequest,
                                            BindingResult bindingResult) {
@@ -93,8 +98,8 @@ public class ApiV1sUrlsController {
         }
     }
 
-    // SURL 삭제
     @DeleteMapping("/{id}")
+    @Operation(summary = " SURL 삭제")
     public RsData deleteSUrl(@PathVariable("id") Long id) {
         return sUrlService.deleteById(id);
     }
