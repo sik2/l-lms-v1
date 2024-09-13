@@ -30,23 +30,12 @@ public class SUrlRequest {
         @NotNull(message = "URL은 필수입니다.")
         public String originUrl;
 
-        public Long redirectCount;
+        @Min(value = 0)
+        private Long redirectCount = 0L;
 
-        public Boolean isActive;
+        private Boolean isActive = true;
 
         public LocalDateTime modifyDate;
     }
 
-    @Getter
-    @Setter
-    public static class DeleteRequest {
-
-        public Long id;
-
-        public Long redirectCount;
-
-        public Boolean isActive;
-
-        public LocalDateTime createDate;
-    }
 }

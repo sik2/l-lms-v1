@@ -1,5 +1,6 @@
 package lab.loop.lms.domain.sUrl.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lab.loop.lms.domain.sUrl.entity.SUrl;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ public class SUrlDTO {
 //    // 작성자 이름(닉네임)
 //    private String memberName;
     // 원래 URL
+    @NotNull
     private String originUrl;
     // 변경된 짧은 URL
     private String shortUrl;

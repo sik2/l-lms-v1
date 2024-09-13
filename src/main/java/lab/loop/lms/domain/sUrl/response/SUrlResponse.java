@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SUrlResponse {
+
     private SUrlDTO sUrlDTO;
 
     public SUrlResponse(SUrl sUrl) {
