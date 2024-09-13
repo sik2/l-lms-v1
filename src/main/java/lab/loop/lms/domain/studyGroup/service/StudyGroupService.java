@@ -3,6 +3,7 @@ package lab.loop.lms.domain.studyGroup.service;
 import lab.loop.lms.domain.member.entity.Member;
 import lab.loop.lms.domain.member.repository.MemberRepository;
 import lab.loop.lms.domain.studyGroup.dto.GroupMemberDto;
+import jakarta.persistence.EntityNotFoundException;
 import lab.loop.lms.domain.studyGroup.entity.GroupMember;
 import lab.loop.lms.domain.studyGroup.entity.StudyGroup;
 import lab.loop.lms.domain.studyGroup.repository.GroupMemberRepository;
@@ -10,12 +11,13 @@ import lab.loop.lms.domain.studyGroup.repository.StudyRepository;
 import lab.loop.lms.domain.studyGroup.studyGroupConvertDto.StudyGroupDtoConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
-
 import static lab.loop.lms.domain.studyGroup.entity.GroupMember.InvitationStatus.INVITED;
 import static lab.loop.lms.domain.studyGroup.entity.GroupMember.LevelStatus.MEMBER;
+import org.springframework.dao.DataIntegrityViolationException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 @Service
 @RequiredArgsConstructor
@@ -62,5 +64,58 @@ public class StudyGroupService {
         return groupMemberList.stream()
                 .map(StudyGroupDtoConverter::convertToDto) // 변환 메서드를 사용
                 .collect(Collectors.toList());
+    }
+
+    public List<StudyGroup> getStudyGroupByMemberId(Long memberId) {
+        return this.studyRepository.findAllByMemberId(memberId);
+    }
+
+    public List<StudyGroup> getInvitedStudyGroupsByMemberId(Long memberId) {
+        List<GroupMember> groupMembers = groupMemberRepository.findByMemberIdAndInvitationStatus(memberId, GroupMember.InvitationStatus.INVITED);
+
+        List<StudyGroup> studyGroups = new ArrayList<>();
+        for(GroupMember groupMember : groupMembers) {
+            studyGroups.add(groupMember.getStudyGroup());
+        }
+
+        return studyGroups;
+    }
+
+    public List<StudyGroup> getStudyGroups() {
+        return this.studyRepository.findAll();
+    }
+
+    public StudyGroup createGroup(String name, String description, Boolean isPublic) {
+        StudyGroup studyGroup = StudyGroup.builder()
+                .name(name)
+                .description(description)
+                .isPublic(isPublic)
+                .createdDate(LocalDateTime.now())
+                .build();
+        return this.studyRepository.save(studyGroup);
+    }
+
+    public StudyGroup getStudyGroup(Long id) {
+        return this.studyRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 그룹이 존재하지 않습니다."));
+    }
+
+    public StudyGroup modifyGroup(StudyGroup studyGroup, String name, String description, Boolean isPublic) {
+        studyGroup.setName(name);
+        studyGroup.setDescription(description);
+        studyGroup.setIsPublic(isPublic);
+
+        return this.studyRepository.save(studyGroup);
+    }
+
+    public void deleteGroup(StudyGroup studyGroup) {
+        if(!studyRepository.existsById(studyGroup.getId())) {
+            throw new EntityNotFoundException("스터디 그룹이 존재하지 않습니다");
+        }
+
+        try {
+            this.studyRepository.delete(studyGroup);
+        } catch (DataIntegrityViolationException e) {
+            throw new IllegalStateException("삭제가 불가합니다", e);
+        }
     }
 }

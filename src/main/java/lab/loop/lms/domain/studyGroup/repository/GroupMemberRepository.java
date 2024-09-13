@@ -15,4 +15,6 @@ public interface GroupMemberRepository extends JpaRepository<GroupMember, Long> 
 
 //    해당 스터디 그룹에 속한 멤버들 조회하는 구문
     List<GroupMember> findByStudyGroup(StudyGroup studyGroup);
+//    로그인된 유저가 초대가 된 스터디그룹의 리스트 불러오기
+    List<GroupMember> findByMemberIdAndInvitationStatus(Long memberId, GroupMember.InvitationStatus invitationStatus);
 }
