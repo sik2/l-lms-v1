@@ -53,7 +53,7 @@ public class PostService {
         );
     }
 
-    public RsData<Post> remove(Long id) {
+    public RsData<Post> deleteById(Long id) {
         postRepository.deleteById(id);
 
         return RsData.of(

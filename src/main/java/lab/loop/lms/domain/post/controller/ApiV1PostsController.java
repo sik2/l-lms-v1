@@ -103,7 +103,7 @@ public class ApiV1PostsController {
             );
         }
 
-        RsData<Post> result = postService.remove(id);
+        RsData<Post> result = postService.deleteById(id);
 
         return RsData.of(
                 result.getResultCode(),
