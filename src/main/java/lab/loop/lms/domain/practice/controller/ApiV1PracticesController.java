@@ -57,7 +57,7 @@ public class ApiV1PracticesController {
     @Operation(summary = "실습문제 등록")
     public RsData<CreatePracticeResponse> createPractice(@Valid @RequestBody CreatePracticeRequest createPracticeRequest, BindingResult bindingResult) {
         Member member = rq.getMember();
-        RsData<Practice> result = practiceService.create(member, createPracticeRequest.getTitle(), createPracticeRequest.getContent(),  createPracticeRequest.getLangType(), createPracticeRequest.getIsPublic(),);
+        RsData<Practice> result = practiceService.create(member, createPracticeRequest.getTitle(), createPracticeRequest.getContent(),  createPracticeRequest.getLangType(), createPracticeRequest.getIsPublic());
 
         if (bindingResult.hasErrors()) {
             return RsData.of("400-1","유효하지 않은 입력 입니다.");
