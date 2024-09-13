@@ -23,7 +23,7 @@ public class SUrlService {
 
     // SURL 등록
     @Transactional
-    public RsData create(SUrlRequest.CreateRequest sUrlRequest) {
+    public RsData<SUrl> create(SUrlRequest.CreateRequest sUrlRequest) {
         // 단축 URL 생성 로직 적용
         String shortUrl = generateShortUrl(sUrlRequest.getOriginUrl());
 
@@ -36,7 +36,7 @@ public class SUrlService {
 
         sUrlRepository.save(sUrl);
 
-        return RsData.of("1", "SURL 등록 완료",sUrl);
+        return RsData.of("201", "SURL 등록 완료",sUrl);
     }
 
     // 단축 URL 생성 메서드
@@ -78,6 +78,9 @@ public class SUrlService {
     public RsData<SUrl> modify(Long id, SUrlRequest.ModifyRequest modifyRequest) {
         Optional<SUrl> sUrlOptional = sUrlRepository.findById(id);
 
+        if (!sUrlOptional.isPresent()) {
+            return RsData.of("400", "SURL을 찾을 수 없습니다.", null);
+        }
 
         SUrl sUrl = sUrlOptional.get();
 
@@ -93,7 +96,8 @@ public class SUrlService {
 
         sUrlRepository.save(sUrl);
 
-        return RsData.of("1", "SURL 수정 완료", new SUrl());
+        // 수정된 SUrl 객체 반환
+        return RsData.of("200", "SURL 수정 완료", sUrl);
     }
 
 
@@ -116,12 +120,21 @@ public class SUrlService {
         Optional<SUrl> sUrlOptional = sUrlRepository.findById(id);
 
         if (!sUrlOptional.isPresent()) {
-            return RsData.of("1", "해당 SURL을 찾을 수 없습니다.");
+            return RsData.of("400", "해당 SURL을 찾을 수 없습니다.");
         }
 
         sUrlRepository.deleteById(id);
 
-        return RsData.of("1", "SURL 삭제 완료", new SUrlResponse(sUrlOptional.get()));
+        return RsData.of("200", "SURL 삭제 완료", new SUrlResponse(sUrlOptional.get()));
+    }
+
+    // redirectCount 증가 메서드
+    @Transactional
+    public void increaseRedirectCount(SUrl sUrl) {
+
+        sUrl.setRedirectCount(sUrl.getRedirectCount() + 1);
+
+        sUrlRepository.save(sUrl);
     }
 
 
