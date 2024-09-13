@@ -17,7 +17,7 @@ import lombok.experimental.SuperBuilder;
 public class SUrl extends BaseEntity {
 
     @ManyToOne
-    private Member author;
+    private Member member;
 
     @Column(columnDefinition = "TEXT")
     private String originUrl;
