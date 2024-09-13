@@ -1,6 +1,7 @@
 package lab.loop.lms.domain.practice.controller;
 
-import jakarta.persistence.Column;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -15,9 +16,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/api/v1/practices")
+@RequestMapping(value = "/api/v1/practices", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+@Tag(name = "ApiV1PracticesController", description = "실습 컨트롤러")
 public class ApiV1PracticesController {
 
     private final PracticeService practiceService;
@@ -40,25 +44,25 @@ public class ApiV1PracticesController {
 
     }
 
-    // 문제 등록
     @PostMapping(value = "")
+    @Operation(summary = "실습문제 등록")
     public RsData<?> createPractice(@Valid @RequestBody CreatePracticeRequest req, BindingResult br) {
 
         if(br.hasErrors()){
-            return RsData.of("400-1","유효하지 않은 입력 입니다.",1);
+            return RsData.of("400-1","유효하지 않은 입력 입니다.");
         }
 
         return practiceService.createPractice(req);
     }
 
-    // 단건 조회
     @GetMapping(value = "/{id}")
+    @Operation(summary = "실습문제 단건 조회")
     public RsData<PracticeDto> getPracticeById(@PathVariable("id") Long id) {
         return practiceService.getPracticeById(id);
     }
 
-    // 다건 조회
     @GetMapping(value = "")
+    @Operation(summary = "실습문제 다건 조회")
     public RsData<List<PracticeDto>> getPractices() {
         return practiceService.getPractices();
     }
@@ -84,15 +88,15 @@ public class ApiV1PracticesController {
 
     }
 
-    // 삭제
     @DeleteMapping(value = "/{id}")
+    @Operation(summary = "실습문제 삭제")
     public RsData<?> deletePracticeById(@PathVariable("id") Long id) {
 
         return practiceService.deletePracticeById(id);
     }
 
-    // 수정
     @PatchMapping(value = "")
+    @Operation(summary = "실습문제 수정")
     public RsData<?> updatePractice(@Valid @RequestBody UpdatePracticeRequest req, BindingResult br) {
 
         if(br.hasErrors()){
@@ -101,7 +105,4 @@ public class ApiV1PracticesController {
 
         return practiceService.updatePractice(req);
     }
-
-
-
 }
