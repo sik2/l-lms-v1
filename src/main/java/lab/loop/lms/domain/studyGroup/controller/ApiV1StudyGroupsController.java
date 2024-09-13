@@ -102,7 +102,7 @@ public class ApiV1StudyGroupsController {
 
         studyGroupService.inviteGroupMember(groupId, userId);
 
-        return RsData.of("S-1", "그룹에 회원 초대 성공", null);
+        return RsData.of("200", "그룹에 회원 초대 성공", null);
     }
 
 //    해당 그룹 회원 목록 리스트 불러오는 구문
@@ -112,9 +112,9 @@ public class ApiV1StudyGroupsController {
         List<GroupMemberDto> groupMemberList = studyGroupService.getGroupMemberList(groupId);
 
         if (groupMemberList.isEmpty()) {
-            return RsData.of("F-1", "해당 그룹에 회원이 없습니다.", null);
+            return RsData.of("400", "해당 그룹에 회원이 없습니다.", null);
         }
 
-        return RsData.of("S-1", "그룹 회원 목록 불러오기 성공", groupMemberList);
+        return RsData.of("200", "그룹 회원 목록 불러오기 성공", groupMemberList);
     }
 }
