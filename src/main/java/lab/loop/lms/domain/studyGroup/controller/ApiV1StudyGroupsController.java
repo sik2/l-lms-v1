@@ -1,8 +1,16 @@
 package lab.loop.lms.domain.studyGroup.controller;
 
-import org.springframework.web.bind.annotation.RestController;
+import lab.loop.lms.domain.studyGroup.dto.GroupMemberDto;
+import lab.loop.lms.domain.studyGroup.service.StudyGroupService;
+import lab.loop.lms.global.rsData.RsData;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
+@RequestMapping(value = "/api/v1/groups")
 public class ApiV1StudyGroupsController {
 
     private final StudyGroupService studyGroupService;
