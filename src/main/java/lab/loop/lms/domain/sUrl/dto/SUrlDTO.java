@@ -11,11 +11,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class SUrlDTO {
     private Long id;
-
-//    // 작성자 id값
-//    private Long memberId;
-//    // 작성자 이름(닉네임)
-//    private String memberName;
     // 원래 URL
     @NotNull
     private String originUrl;
@@ -32,8 +27,6 @@ public class SUrlDTO {
 
     public SUrlDTO(SUrl sUrl) {
         this.id = sUrl.getId();
-//        this.memberId = sUrl.getAuthor().getId();
-//        this.memberName = sUrl.getAuthor().getNickname();
         this.originUrl = sUrl.getOriginUrl();
         this.shortUrl = sUrl.getShortUrl();
         this.redirectCount = sUrl.getRedirectCount();
