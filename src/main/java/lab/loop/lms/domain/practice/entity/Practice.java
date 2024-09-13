@@ -15,7 +15,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @ToString(callSuper = true)
 public class Practice extends BaseEntity {
     @ManyToOne
