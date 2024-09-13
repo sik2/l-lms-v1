@@ -98,7 +98,7 @@ public class ApiV1StudyGroupsController {
     }
 //    그룹에 회원을 초대하는 구문
     @PostMapping(value = "/{groupId}/members/{userId}")
-    public RsData<?> inviteGroupMember(@PathVariable("groupId") Long groupId, @PathVariable("userId") Long userId) {
+    public RsData<Void> inviteGroupMember(@PathVariable("groupId") Long groupId, @PathVariable("userId") Long userId) {
 
         studyGroupService.inviteGroupMember(groupId, userId);
 
@@ -107,7 +107,7 @@ public class ApiV1StudyGroupsController {
 
 //    해당 그룹 회원 목록 리스트 불러오는 구문
     @GetMapping(value = "/{groupId}/members")
-    public RsData<?> getGroupMemberList(@PathVariable("groupId") Long groupId) {
+    public RsData<List<GroupMemberDto>> getGroupMemberList(@PathVariable("groupId") Long groupId) {
 
         List<GroupMemberDto> groupMemberList = studyGroupService.getGroupMemberList(groupId);
 
