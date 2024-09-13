@@ -22,7 +22,14 @@ public class GroupMember extends BaseEntity {
     @JoinColumn
     private Member member;
 
-    private Byte level;
+    @Enumerated(EnumType.STRING)
+    private LevelStatus levelStatus;
+
+    public enum LevelStatus {
+        ADMIN,
+        MANAGER,
+        MEMBER
+    }
 
     @Enumerated(EnumType.STRING)
     private InvitationStatus invitationStatus;
