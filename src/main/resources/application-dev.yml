@@ -17,9 +17,4 @@ spring:
     username: root
     password:
 custom:
-  site:
-    name: llms
-    cookieDomain: localhost
-    frontUrl: "http://localhost:3000"
-    backUrl: "http://localhost:8090"
   fileDirPath: /usr/file
